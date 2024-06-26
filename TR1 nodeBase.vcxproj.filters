@@ -128,5 +128,6 @@
     <ClInclude Include="imnodes_internal.h">
       <Filter>KamataEngine</Filter>
     </ClInclude>
+    <ClInclude Include="struct.h" />
   </ItemGroup>
 </Project>

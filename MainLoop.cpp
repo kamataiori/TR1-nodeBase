@@ -26,7 +26,7 @@ void MainLoop::InPut()
 	Novice::GetHitKeyStateAll(keys);
 }
 
-void MainLoop::Updata() { result_->Update(); }
+void MainLoop::Updata() { result_->Update(keys); }
 
 void MainLoop::Draw() { result_->Draw(); }
 
