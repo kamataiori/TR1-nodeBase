@@ -2,6 +2,7 @@
 //#include <vector>
 #include <iostream> // for std::cout
 #include <Novice.h>
+#include <string>
 
 void Result::Initialize()
 {
@@ -27,7 +28,7 @@ void Result::Initialize()
 		{false},
 		{rand() % 3 + 1}
 	};
-	for (int i = 0; i < 500; i++)
+	for (int i = 0; i < particleNumber; i++)
 	{
 		particle.pos[i].x = 0.0f;
 		particle.pos[i].y = 0.0f;
@@ -79,7 +80,7 @@ void Result::Initialize()
 
 	e = 0.4f;
 	ViscosityCoefficient = 0.1f;
-	for (int i = 0; i < 500; i++)
+	for (int i = 0; i < particleNumber; i++)
 	{
 		fx = -ViscosityCoefficient * particle.acceleration[i].x;
 		fy = -ViscosityCoefficient * particle.acceleration[i].y;
@@ -141,7 +142,7 @@ void Result::Update(char* keys)
 
 	if (particleStart == false)
 	{
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			particle.pos[i].x = box.center.x + rand() % (int)box.widelength - (int)box.widelength / 2;
 			particle.pos[i].y = box.center.y + rand() % (int)box.heghtlength - (int)box.heghtlength / 2;
@@ -161,7 +162,7 @@ void Result::Update(char* keys)
 	if (particleStart == true)
 	{
 
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			if (particle.isShot[i] == false)
 			{
@@ -174,20 +175,20 @@ void Result::Update(char* keys)
 
 		}
 
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			particle.acceleration[i].x += fx;
 			particle.acceleration[i].y += fy;
 		}
 
 		//パーティクルを移動させる
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			particle.pos[i].y += particle.acceleration[i].y;
 			particle.pos[i].x += particle.acceleration[i].x;
 		}
 
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			if (particle.isShot[i] == true)
 			{
@@ -195,7 +196,7 @@ void Result::Update(char* keys)
 			}
 		}
 
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			if (particle.pos[i].y >= line.Start.y - 8)
 			{
@@ -228,8 +229,10 @@ void Result::Draw()
 
 	Novice::DrawBox((int)pabackGround.center.x - 320, (int)pabackGround.center.y - 360, (int)pabackGround.widelength, (int)pabackGround.heghtlength, 0.0f, BLACK, kFillModeSolid);
 
-
-	Novice::DrawBox((int)box.leftTop.x, (int)box.leftTop.y, (int)box.widelength, (int)box.heghtlength, 0.0f, WHITE, kFillModeWireFrame);
+	if (IsparticleBox == true)
+	{
+		Novice::DrawBox((int)box.leftTop.x, (int)box.leftTop.y, (int)box.widelength, (int)box.heghtlength, 0.0f, WHITE, kFillModeWireFrame);
+	}
 
 	Novice::DrawLine((int)line.Start.x, (int)line.Start.y, (int)line.End.x, (int)line.End.y, line.color);
 
@@ -237,7 +240,7 @@ void Result::Draw()
 
 	if (particleStart == true)
 	{
-		for (int i = 0; i < 500; i++)
+		for (int i = 0; i < particleNumber; i++)
 		{
 			if (particle.isShot[i] == true)
 			{
@@ -248,7 +251,7 @@ void Result::Draw()
 		}
 	}
 
-	Novice::DrawBox((int)backGround.center.x - 320, (int)backGround.center.y - 360, (int)backGround.widelength, (int)backGround.heghtlength, 0.0f,GRAY, kFillModeSolid);
+	Novice::DrawBox((int)backGround.center.x - 320, (int)backGround.center.y - 360, (int)backGround.widelength, (int)backGround.heghtlength, 0.0f, GRAY, kFillModeSolid);
 
 }
 
@@ -273,7 +276,46 @@ void Result::DrawNodeEditor()
 	int input_pin_id3 = 8;  // 三つ目の入力ピンID
 	int output_pin_id3 = 9; // 三つ目の出力ピンID
 
+	int node_id4 = 10;       // 四つ目のノードID
+	int input_pin_id4 = 11;  // 四つ目の入力ピンID
+	int output_pin_id4 = 12; // 四つ目の出力ピンID
+
+	int node_id5 = 13;       // 五つ目のノードID
+	int input_pin_id5 = 14;  // 五つ目の入力ピンID
+	int output_pin_id5 = 15; // 五つ目の出力ピンID
+
 	ImNodes::BeginNodeEditor();
+
+
+	// ノードのタイトルバーの色を設定
+	ImNodes::PushColorStyle(ImNodesCol_TitleBar, IM_COL32(11, 109, 191, 255));
+	ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected, IM_COL32(81, 148, 204, 255));
+
+	// ノードを開始
+	ImNodes::BeginNode(node_id4);
+
+	// ノードのタイトルバー
+	ImNodes::BeginNodeTitleBar();
+	ImGui::TextUnformatted("Flag");
+	ImNodes::EndNodeTitleBar();
+
+	// 入力ピン
+	ImNodes::BeginInputAttribute(input_pin_id4);
+	ImGui::Text("Input");
+	ImNodes::EndInputAttribute();
+
+	// ImGuiで変更したいもの
+	ImGui::Checkbox("particleBox", &IsparticleBox);
+
+	// 出力ピン
+	ImNodes::BeginOutputAttribute(output_pin_id4);
+	ImGui::Text("OutPut");
+	ImNodes::EndOutputAttribute();
+
+	// ノードを終了
+	ImNodes::EndNode();
+
+
 
 	// ノードのタイトルバーの色を設定
 	ImNodes::PushColorStyle(ImNodesCol_TitleBar, IM_COL32(11, 109, 191, 255));
@@ -304,6 +346,43 @@ void Result::DrawNodeEditor()
 	ImNodes::EndNode();
 
 
+
+	// ノードのタイトルバーの色を設定
+	ImNodes::PushColorStyle(ImNodesCol_TitleBar, IM_COL32(4000, 1900, 10100, 2050));
+	ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected, IM_COL32(100, 1025, 1000, 1000));
+
+	// 三つ目のノードを開始
+	ImNodes::BeginNode(node_id5);
+
+	// ノードのタイトルバー
+	ImNodes::BeginNodeTitleBar();
+	ImGui::TextUnformatted("particleNumber");
+	ImNodes::EndNodeTitleBar();
+
+	// 入力ピン
+	ImNodes::BeginInputAttribute(input_pin_id5);
+	ImGui::Text("Input");
+	ImNodes::EndInputAttribute();
+
+	// ImGuiで変更したいもの
+	ImGui::DragInt("particleNumber", &particleNumber);
+
+	// 出力ピン
+	ImNodes::BeginOutputAttribute(output_pin_id5);
+	ImGui::Text("Output");
+	ImNodes::EndOutputAttribute();
+
+
+	// 三つ目のノードを終了
+	ImNodes::EndNode();
+
+
+
+
+
+
+
+
 	// ノードのタイトルバーの色を設定
 	ImNodes::PushColorStyle(ImNodesCol_TitleBar, IM_COL32(40, 19, 101, 205));
 	ImNodes::PushColorStyle(ImNodesCol_TitleBarSelected, IM_COL32(10, 125, 100, 100));
@@ -323,8 +402,54 @@ void Result::DrawNodeEditor()
 	ImNodes::EndInputAttribute();
 
 	// ImGuiで変更したいもの
-	ImGui::DragFloat("acceleration.x", &particle.acceleration->x);
-	ImGui::DragFloat("acceleration.y", &particle.acceleration->y);
+	/*ImGui::DragFloat("acceleration.x", &particle.acceleration->x);
+	ImGui::DragFloat("acceleration.y", &particle.acceleration->y);*/
+
+	ImGui::Checkbox("accelerationMenu", &IsAccelerationMemu);
+
+	if (IsAccelerationMemu == true)
+	{
+		ImGui::Begin("Particle acceleration");
+
+		// メニューバーを開始
+		if (ImGui::BeginMenuBar())
+		{
+			if (ImGui::BeginMenu("File"))
+			{
+				if (ImGui::MenuItem("Save")) {
+
+				}
+				if (ImGui::MenuItem("Load")) {
+
+				}
+
+				ImGui::EndMenu();
+			}
+			ImGui::EndMenuBar();
+
+		}
+
+		static std::vector<float> items(particleNumber);
+
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(450, 200), ImGuiWindowFlags_NoTitleBar);
+		for (int i = 0; i < items.size(); ++i) {
+			char name[64];
+			sprintf_s(name, "acceleration.Y %d", i);
+			ImGui::SliderFloat(name, &particle.acceleration[i].y, 0.0f, 10.0f);
+		}
+		ImGui::EndChild();
+
+		ImGui::BeginChild(ImGui::GetID((void*)0), ImVec2(450, 200), ImGuiWindowFlags_NoTitleBar);
+		for (int i = 0; i < items.size(); ++i) {
+			char name[64];
+			sprintf_s(name, "acceleration.X %d", i);
+			ImGui::SliderFloat(name, &particle.acceleration[i].x, 0.0f, 10.0f);
+		}
+		ImGui::EndChild();
+
+		ImGui::End();
+	}
+
 
 	// 出力ピン
 	ImNodes::BeginOutputAttribute(output_pin_id2);
@@ -350,7 +475,7 @@ void Result::DrawNodeEditor()
 
 	// 入力ピン
 	ImNodes::BeginInputAttribute(input_pin_id3);
-	ImGui::Text("Input nodemerge");
+	ImGui::Text("Input");
 	ImNodes::EndInputAttribute();
 
 	// ImGuiで変更したいもの
@@ -358,7 +483,7 @@ void Result::DrawNodeEditor()
 
 	// 出力ピン
 	ImNodes::BeginOutputAttribute(output_pin_id3);
-	ImGui::Text("Output nodemerge");
+	ImGui::Text("Output");
 	ImNodes::EndOutputAttribute();
 
 
@@ -415,4 +540,5 @@ void Result::DrawNodeEditor()
 	}
 
 	ImGui::End();
+
 }

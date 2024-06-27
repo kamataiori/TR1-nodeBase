@@ -52,9 +52,14 @@ public:
 	float fy{};
 
 	bool particleStart{};
+	bool IsparticleBox = false;
+	//bool IsNumber = false;
+	bool IsAccelerationMemu = false;
 
 	const int particleWidthRange = 640;
 	const int particleHieghtRange = 720;
+
+	int particleNumber = 500;
 
 
 };
